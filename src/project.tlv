@@ -54,6 +54,9 @@
    // |                |
    // ==================
    //Jason Kahn Lab 4.3
+   `BOGUS_USE($size)
+   `BOGUS_USE($weight)
+   
    $size[1:0] = 
       $weight[7:0] >= 8'd64
          ? 2'd3 : 
@@ -61,7 +64,6 @@
          ? 2'd2 : 
       //default
            2'd1;   
- 
 
    // Note that pipesignals assigned here can be found under /fpga_pins/fpga (if in_fpga is set to 1 above).
    
