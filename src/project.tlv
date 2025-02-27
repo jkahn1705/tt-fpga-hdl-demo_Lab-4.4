@@ -13,6 +13,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+//Jason Kahn Lab 4.3
+   $size[1:0] = 
+      $weight[7:0] >= 8'd64
+         ? 2'd3 : 
+      $weight[7:0] >= 8'd56
+         ? 2'd2 : 
+      //default
+           2'd1;   
+
 `define default_netname none
 
 module tt_um_example (
