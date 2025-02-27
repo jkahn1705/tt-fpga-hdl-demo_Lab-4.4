@@ -5,7 +5,7 @@
    // * For ChipCraft Course                    *
    // * Replace this file with your own design. *
    // *******************************************
-
+//
    use(m5-1.0)
 \SV
 /*
