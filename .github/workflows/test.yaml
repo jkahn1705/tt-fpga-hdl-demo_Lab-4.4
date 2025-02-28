@@ -13,8 +13,8 @@ jobs:
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
-        run: sandpiper-saas -i project.tlv -o project.v || echo "Sandpiper failed"
+        run: sandpiper-saas -i project.tlv -o project.v --verbose
       - name: List Files
-        run: ls -la  # Debug: Check if project.v exists
+        run: ls -la
       - name: Build and Simulate
         run: verilator --binary -j 0 --trace project.v && ./obj_dir/Vmy_module
