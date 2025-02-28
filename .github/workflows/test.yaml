@@ -5,11 +5,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Sandpiper
-        run: pip install sandpiper-saas
+      - name: Install Python and Sandpiper
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install sandpiper-saas
       - name: Install Verilator
-        run: sudo apt-get update && sudo apt-get install -y verilator
+        run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
-        run: sandpiper-saas -i project.tlv -o project.v
+        run: sandpiper-saas -i project.tlv -o project.v || echo "Sandpiper failed"
+      - name: List Files
+        run: ls -la  # Debug: Check if project.v exists
       - name: Build and Simulate
         run: verilator --binary -j 0 --trace project.v && ./obj_dir/Vmy_module
