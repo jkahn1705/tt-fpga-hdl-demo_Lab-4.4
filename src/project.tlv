@@ -6,12 +6,12 @@
       input wire reset,
       output reg [1:0] size
    );
-      reg [7:0] weight;  // Define weight as a register
+      reg [7:0] weight;
       always @(posedge clk or posedge reset) begin
          if (reset) begin
             weight <= 8'b0;
          end else begin
-            weight <= weight + 1;  // Simple increment for testing
+            weight <= weight + 1;
          end
       end
 \TLV
@@ -22,6 +22,5 @@
    *passed = *cyc_cnt > 40;
    *failed = 1'b0;
 \SV
-   assign size = $size;  // Connect TL-Verilog to module output
-   m5_makerchip_module  // Keep for Makerchip compatibility
+   assign size = $size;
    endmodule
