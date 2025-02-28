@@ -17,4 +17,4 @@ jobs:
       - name: List Files
         run: ls -la
       - name: Build and Simulate
-        run: verilator --binary -j 0 --trace -f testbench.v project.v && ./obj_dir/Vtestbench
+        run: verilator --binary -j 0 --trace project.v && ./obj_dir/Vmy_module
