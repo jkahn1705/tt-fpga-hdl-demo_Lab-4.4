@@ -1,24 +1,11 @@
-name: fpga
-
-on:
-  push:
-    # Comment out (or remove) the following line to run the FPGA workflow on every push:
-    #branches: none
-  workflow_dispatch:
-
+name: FPGA
+on: [push]
 jobs:
   fpga:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-      # Build Verilog if necessary from, e.g. TL-Verilog.
-      - name: Build Verilog
-        run: |
-          cd test
-          make verilog
-
-      - name: FPGA bitstream for TT ASIC Sim (ICE40UP5K)
-        uses: TinyTapeout/tt-gds-action/fpga/ice40up5k@tt10
+      - uses: actions/checkout@v3
+      - name: Install Tools
+        run: sudo apt-get update && sudo apt-get install -y verilator
+      - name: Compile and Simulate
+        run: verilator --binary -j 0 project.v
