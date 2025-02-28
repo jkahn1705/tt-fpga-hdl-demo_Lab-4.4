@@ -1,23 +1,14 @@
-name: docs
-
-on:
-  push:
-  workflow_dispatch:
-
+name: Docs
+on: [push]
 jobs:
   docs:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      # Build Verilog if necessary from, e.g. TL-Verilog (to satisfy Verilog existence check).
-      - name: Build Verilog
-        run: |
-          cd test
-          make verilog
-
-      - name: Build docs
-        uses: TinyTapeout/tt-gds-action/docs@tt10
+      - uses: actions/checkout@v3
+      - name: Install Sandpiper
+        run: pip install sandpiper-saas
+      - name: Generate Docs
+        run: sandpiper-saas -i project.tlv --doc > docs.md
+      - name: Upload Docs
+        uses: actions/upload-artifact@v3
+        with: { path: docs.md }
