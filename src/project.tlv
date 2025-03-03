@@ -19,7 +19,7 @@
          end
       end
 // TL-Verilog logic for size based on weight
-\TLV
+\TLV my_module()
    $size[1:0] = 
       $weight[7:0] >= 8'd64 ? 2'd3 :  // Size 3 if weight >= 64
       $weight[7:0] >= 8'd56 ? 2'd2 :  // Size 2 if weight >= 56
