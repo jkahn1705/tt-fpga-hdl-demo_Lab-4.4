@@ -12,8 +12,10 @@ jobs:
           pip3 install sandpiper-saas --no-input  # Non-interactive install
       - name: Install Verilator
         run: sudo apt-get install -y verilator
+      - name: Set Sandpiper ToS Acceptance
+        run: echo "SANDPIPER_ACCEPT_TOS=true" >> $GITHUB_ENV  # Set env variable for ToS
       - name: Compile TL-Verilog
-        run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose --yes  # Accept ToS automatically
+        run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
       - name: List Files
         run: ls -la
       - name: Check project.v
