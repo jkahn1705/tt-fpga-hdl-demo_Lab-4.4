@@ -13,7 +13,10 @@ jobs:
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Set Sandpiper ToS Acceptance
-        run: echo "SANDPIPER_ACCEPT_TOS=true" >> $GITHUB_ENV  # Set env variable for ToS
+        run: |
+          echo "Creating ToS acceptance script"
+          echo "import os; os.environ['SANDPIPER_ACCEPT_TOS'] = 'true'" > tos_accept.py
+          python3 tos_accept.py
       - name: Compile TL-Verilog
         run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
       - name: List Files
