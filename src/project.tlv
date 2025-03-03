@@ -21,9 +21,11 @@
 // TL-Verilog logic for size based on weight
 \TLV
    @0
-      $size[1:0] = $weight[7:0] > 64 ? 2'd3 :  // Size 3 if weight > 64
-                   $weight[7:0] > 56 ? 2'd2 :  // Size 2 if weight > 56
-                   2'd1;                      // Default size 1
+      $reset = reset;       // Explicit reset signal
+      $clk = clk;           // Explicit clock signal
+      $size[1:0] = $weight > 64 ? 2'd3 :  // Size 3 if weight > 64
+                   $weight > 56 ? 2'd2 :  // Size 2 if weight > 56
+                   2'd1;                  // Default size 1
 \SV
    assign size = $size;  // Connect TL-Verilog size to output
    endmodule
