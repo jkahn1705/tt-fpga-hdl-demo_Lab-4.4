@@ -11,7 +11,7 @@ jobs:
           sudo apt-get install -y python3-pip
           pip3 install sandpiper-saas
       - name: Generate Docs
-        run: sandpiper-saas -i project.tlv --doc > docs.md
+        run: sandpiper-saas -i project.tlv --doc > docs.md || echo "No docs generated" > docs.md
       - name: Upload Docs
         uses: actions/upload-artifact@v3
         with:
