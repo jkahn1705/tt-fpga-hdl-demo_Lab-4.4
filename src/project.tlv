@@ -18,12 +18,14 @@
             cyc_cnt <= cyc_cnt + 1; // Increment cycle counter
          end
       end
-// TL-Verilog logic for egg sorter
+// TL-Verilog logic for egg sorter based on weight
 \TLV my_module()
-   $size[1:0] = 
-      $weight[7:0] >= 8'd64 ? 2'd3 :  // Size 3 if weight >= 64
-      $weight[7:0] >= 8'd56 ? 2'd2 :  // Size 2 if weight >= 56
-      2'd1;                           // Default size 1
+   |cpu
+      @0
+         $size[1:0] = 
+            $weight[7:0] >= 8'd64 ? 2'd3 :  // Size 3 if weight >= 64
+            $weight[7:0] >= 8'd56 ? 2'd2 :  // Size 2 if weight >= 56
+            2'd1;                           // Default size 1
 \SV
    assign size = $size;  // Connect TL-Verilog size to output
    endmodule
