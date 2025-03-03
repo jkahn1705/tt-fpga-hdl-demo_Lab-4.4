@@ -23,5 +23,5 @@
       $weight[7:0] >= 8'd56 ? 2'd2 : 
       2'd1;   
 \SV
-   assign size = $size;
+   assign size = $size; //
    endmodule
