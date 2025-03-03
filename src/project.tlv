@@ -23,9 +23,14 @@
    @0
       $reset = reset;       // Explicit reset signal
       $clk = clk;           // Explicit clock signal
-      $size[1:0] = $weight > 64 ? 2'd3 :  // Size 3 if weight > 64
-                   $weight > 56 ? 2'd2 :  // Size 2 if weight > 56
-                   2'd1;                  // Default size 1
+      $reset_size = $reset; // Reset size on reset
+      $next_size[1:0] = $reset ? 2'd1 :  // Default size 1 on reset
+                        $weight > 64 ? 2'd3 :  // Size 3 if weight > 64
+                        $weight > 56 ? 2'd2 :  // Size 2 if weight > 56
+                        2'd1;                  // Default size 1
 \SV
-   assign size = $size;  // Connect TL-Verilog size to output
+   always @(posedge clk or posedge reset) begin
+      if (reset) size <= 2'd1;  // Reset size
+      else size <= $next_size;  // Update size
+   end
    endmodule
