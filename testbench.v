@@ -14,8 +14,9 @@ module testbench;
    initial begin
       reset = 1;
       #10 reset = 0;
-      #500 $finish;  // Run for 50 cycles
+      #500 $display("Simulation ended: size=%d", size);
+      $finish;
    end
    
-   initial $monitor("Time=%0t, size=%d", $time, size);
+   initial $monitor("Time=%0t, weight=%d, size=%d", $time, dut.weight, size);
 endmodule
