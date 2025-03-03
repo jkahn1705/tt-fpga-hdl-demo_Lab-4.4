@@ -6,9 +6,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Sandpiper
-        run: pip install sandpiper-saas
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install sandpiper-saas
       - name: Generate Docs
         run: sandpiper-saas -i project.tlv --doc > docs.md
       - name: Upload Docs
         uses: actions/upload-artifact@v3
-        with: { path: docs.md }
+        with:
+          path: docs.md
