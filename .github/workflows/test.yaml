@@ -9,16 +9,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          pip3 install sandpiper-saas --no-input  # Non-interactive install
+          pip3 install sandpiper-saas --no-input
       - name: Install Verilator
         run: sudo apt-get install -y verilator
-      - name: Set Sandpiper ToS Acceptance
-        run: |
-          echo "Creating ToS acceptance script"
-          echo "import os; os.environ['SANDPIPER_ACCEPT_TOS'] = 'true'" > tos_accept.py
-          python3 tos_accept.py
       - name: Compile TL-Verilog
-        run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
+        run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose --non-interactive
       - name: List Files
         run: ls -la
       - name: Check project.v
