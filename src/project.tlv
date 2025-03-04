@@ -28,10 +28,6 @@
                    $weight[7:0] > 64 ? 2'd3 :  // Size 3 if weight > 64
                    $weight[7:0] > 56 ? 2'd2 :  // Size 2 if weight > 56
                    2'd1;                      // Default size 1
-\SV_plus
-   // Ensure $size is assigned to the Verilog output
-   always @(posedge clk or posedge reset) begin
-      if ($reset) size <= 2'd1;
-      else size <= $size;
-   end
+\SV
+   assign size = $size;  // Connect TL-Verilog size to output
    endmodule
