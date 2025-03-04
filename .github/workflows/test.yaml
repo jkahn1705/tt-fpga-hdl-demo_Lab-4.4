@@ -9,14 +9,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          # Install a custom or patched version of sandpiper-saas from GitHub
-          pip3 install git+https://github.com/makerchip/sandpiper.git@disable-tos-prompt --no-input
-          # Alternatively, if the above fails, use a local patch
-          if [ $? -ne 0 ]; then
-            pip3 install sandpiper-saas==1.0.0 --no-input
-            echo "Patching sandpiper-saas to skip ToS prompt"
-            sed -i 's/if click.confirm/if False  # Disabled ToS prompt for CI/' /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
-          fi
+          pip3 install sandpiper-saas==1.0.0 --no-input
+          # Patch sandpiper-saas to skip ToS prompt
+          echo "Patching sandpiper-saas to skip ToS prompt"
+          sed -i "s/if click.confirm/if False  # Disabled ToS prompt for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
