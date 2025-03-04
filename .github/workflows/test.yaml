@@ -8,11 +8,15 @@ jobs:
       - name: Install Python and Sandpiper
         run: |
           sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install sandpiper-saas==1.1.0 --no-input  # Try the latest version
-          # Patch sandpiper-saas to fix SyntaxError and skip ToS prompt
-          echo "Patching sandpiper-saas to fix SyntaxError and skip ToS"
-          sed -i "s/'Have you read and do you accept these Terms of Service?', default=False/False  # Disabled ToS prompt for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+          sudo apt-get install -y python3-pip git
+          # Try installing from GitHub (if a stable branch exists)
+          pip3 install git+https://github.com/makerchip/sandpiper.git@main --no-input
+          if [ $? -ne 0 ]; then
+            # Fallback to PyPI version and patch
+            pip3 install sandpiper-saas==1.1.0 --no-input
+            echo "Patching sandpiper-saas to fix SyntaxError and skip ToS"
+            sed -i "s/if click.confirm('Please review our Terms of Service: https:\/\/makerchip.com\/terms\/.\n.*', default=False)/if False  # Disabled ToS prompt and fixed SyntaxError for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+          fi
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
