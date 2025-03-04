@@ -29,8 +29,5 @@
                    $weight[7:0] > 56 ? 2'd2 :  // Size 2 if weight > 56
                    2'd1;                      // Default size 1
 \SV
-   always @(posedge $clk or posedge $reset) begin
-      if ($reset) size <= 2'd1;
-      else size <= $size;
-   end
+   assign size = $size;  // Connect TL-Verilog size to output (combinational)
    endmodule
