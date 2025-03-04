@@ -9,10 +9,18 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          pip3 install sandpiper-saas==1.1.0 --no-input  # Use latest stable PyPI version
-          # Patch sandpiper-saas to fix SyntaxError and skip ToS prompt
-          echo "Patching sandpiper-saas to fix SyntaxError and skip ToS"
-          sed -i "s/if click.confirm('Please review our Terms of Service: https:\/\/makerchip.com\/terms\/.\n.*', default=False)/if False  # Disabled ToS prompt and fixed SyntaxError for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+          pip3 install sandpiper-saas==1.1.0 --no-input
+          # Patch sandpiper-saas to skip ToS prompt with debug output
+          echo "Patching sandpiper-saas to skip ToS prompt"
+          if [ -f "/home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py" ]; then
+            echo "Found sandpiper/__init__.py, applying patch..."
+            sed -i "s/if click.confirm('Please review our Terms of Service: https:\/\/makerchip.com\/terms\/.\n.*', default=False)/if False  # Disabled ToS prompt for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+            echo "Patch applied, checking content..."
+            cat /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py | grep "Disabled ToS prompt for CI"
+          else
+            echo "Error: sandpiper/__init__.py not found"
+            exit 1
+          fi
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
