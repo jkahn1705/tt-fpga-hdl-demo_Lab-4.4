@@ -13,6 +13,6 @@ jobs:
       - name: Generate Docs
         run: sandpiper-saas -i project.tlv --doc > docs.md || echo "No docs generated" > docs.md
       - name: Upload Docs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: docs.md
