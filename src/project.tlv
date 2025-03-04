@@ -1,13 +1,17 @@
 \m5_TLV_version 1d: tl-x.org
 \m5
+// Jason Kahn Lab 4.3
+// TL-Verilog module calculating size based on weight thresholds.
+// Size logic: 3 (>64), 2 (>56), 1 (default).
+// For testing in Makerchip and GitHub Actions.
 // Define top-level Verilog module for size calculation
 \SV
    module my_module (
-      input wire clk,         // Clock input
-      input wire reset,       // Reset input
-      output reg [1:0] size   // Size output (2 bits)
+      input wire clk,         // Clock input for synchronous logic
+      input wire reset,       // Reset input to initialize state
+      output reg [1:0] size   // Size output (2 bits) based on weight
    );
-      reg [7:0] weight;       // Weight register (8 bits)
+      reg [7:0] weight;       // Weight register (8 bits) incremented each cycle
       always @(posedge clk or posedge reset) begin  // Sync logic
          if (reset) begin    // Reset condition
             weight <= 8'b0;   // Clear weight
