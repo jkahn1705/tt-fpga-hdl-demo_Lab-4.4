@@ -9,10 +9,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          pip3 install sandpiper-saas==1.0.0 --no-input  # Try a stable version
-          # Patch sandpiper-saas to fix SyntaxError and skip ToS prompt
-          echo "Patching sandpiper-saas to fix SyntaxError and skip ToS"
-          sed -i "s/Have you read and do you accept these Terms of Service?, default=False/False  # Disabled ToS prompt for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+          # Install a custom or patched version of sandpiper-saas from GitHub
+          pip3 install git+https://github.com/makerchip/sandpiper.git@disable-tos-prompt --no-input
+          # Alternatively, if the above fails, use a local patch
+          if [ $? -ne 0 ]; then
+            pip3 install sandpiper-saas==1.0.0 --no-input
+            echo "Patching sandpiper-saas to skip ToS prompt"
+            sed -i 's/if click.confirm/if False  # Disabled ToS prompt for CI/' /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+          fi
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
