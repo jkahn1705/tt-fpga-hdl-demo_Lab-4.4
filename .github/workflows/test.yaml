@@ -10,7 +10,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pip
           pip3 install sandpiper-saas==1.1.0 --no-input
-          # Patch sandpiper-saas to skip ToS prompt with detailed debug output
+          # Patch sandpiper-saas to skip ToS prompt with detailed debug
           echo "Patching sandpiper-saas to skip ToS prompt"
           if [ -f "/home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py" ]; then
             echo "Found sandpiper/__init__.py, applying patch..."
