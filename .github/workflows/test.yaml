@@ -30,4 +30,4 @@ jobs:
           ls -la testbench.v || echo "testbench.v not found"
           cat testbench.v || echo "Cannot display testbench.v"
       - name: Build and Simulate
-        run: verilator --binary -j 0 --trace -f testbench.v project.v && ./obj_dir/Vtestbench
+        run: verilator --binary -j 0 --trace testbench.v project.v && ./obj_dir/Vtestbench
