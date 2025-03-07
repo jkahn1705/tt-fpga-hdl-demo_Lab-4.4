@@ -32,7 +32,7 @@
          `BOGUS_USE($clk $size)  // Silence unused signal warnings
 \SV
    always @(posedge clk or posedge reset) begin
-      if (|cpu$reset) size <= 2'd1;  // Use TL-Verilog reset signal
-      else size <= |cpu$size;        // Use TL-Verilog size signal
+      if (reset) size <= 2'd1;  // Use TL-Verilog reset signal
+      else size <= cpu$size;    // Correctly use TL-Verilog size signal
    end
    endmodule
