@@ -18,7 +18,6 @@ jobs:
           ls -la  # List all files to confirm src/project.tlv exists
       - name: Compile TL-Verilog
         run: |
-          # Ensure we're in the correct directory and bypass ToS prompt
           cd /home/runner/work/test123/test123
           echo "y" | sandpiper-saas -i src/project.tlv -o project.v --verbose
         working-directory: /home/runner/work/test123/test123
@@ -26,5 +25,9 @@ jobs:
         run: ls -la
       - name: Check project.v
         run: cat project.v || echo "No project.v generated"
+      - name: Check testbench.v
+        run: |
+          ls -la testbench.v || echo "testbench.v not found"
+          cat testbench.v || echo "Cannot display testbench.v"
       - name: Build and Simulate
         run: verilator --binary -j 0 --trace -f testbench.v project.v && ./obj_dir/Vtestbench
