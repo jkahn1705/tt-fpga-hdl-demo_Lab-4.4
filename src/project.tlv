@@ -32,7 +32,7 @@
          `BOGUS_USE($clk $size)  // Silence unused signal warnings
 \SV
    always @(posedge clk or posedge reset) begin
-      if ($reset) size <= 2'd1;  // Use TL-Verilog reset signal
-      else size <= |cpu$size;    // Use TL-Verilog size signal with correct pipeline delimiter
+      if (CPU_reset_a0) size <= 2'd1;  // Use translated reset signal
+      else size <= CPU_size_a0;        // Use translated size signal
    end
    endmodule
