@@ -1,10 +1,14 @@
 name: Test
+
 on: [push]
+
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Python and Sandpiper
         run: |
           sudo apt-get update
@@ -27,14 +31,19 @@ jobs:
           else
             echo "Error: sandpiper/__init__.py not found"
             exit 1
-          fi # <-- Added this line to close the if conditional block
+          fi
+
       - name: Install Verilator
         run: sudo apt-get install -y verilator
+
       - name: Compile TL-Verilog
         run: echo "y" | sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
+
       - name: List Files
         run: ls -la
+
       - name: Check project.v
         run: cat project.v || echo "No project.v generated"
+
       - name: Build and Simulate
         run: verilator --binary -j 0 --trace -f testbench.v project.v && ./obj_dir/Vtestbench
