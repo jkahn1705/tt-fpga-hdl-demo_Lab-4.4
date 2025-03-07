@@ -15,7 +15,7 @@ jobs:
       - name: Verify Working Directory and Files
         run: |
           pwd  # Print current working directory
-          ls -la  # List all files to confirm src/project.tlv exists
+          ls -la  # List all files to confirm src/project.tlv and testbench.v exist
       - name: Compile TL-Verilog
         run: |
           cd /home/runner/work/test123/test123
