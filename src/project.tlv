@@ -29,19 +29,10 @@ module top(input wire clk, input wire reset, output wire error3);
          $illegal_op = ($op == 2'b11);                   // Error if op is 11 (invalid)
          $error1 = $bad_input || $illegal_op;            // Combine into error1
 
-      @2
-         $error1 = *|comp$error1;                        // Pass error1 to next stage
-
       @3
          $sum[4:0] = $in1 + $in2;                        // 5-bit sum to detect overflow
          $overflow = $sum[4];                            // Overflow if 5th bit is set
          $error2 = $overflow || $error1;                 // Combine with error1
-
-      @4
-         $error2 = *|comp$error2;                        // Pass error2 to next stage
-
-      @5
-         $error2 = *|comp$error2;                        // Pass error2 to next stage
 
       @6
          $divide_by_zero = ($op == 2'b10) && ($in2 == 4'b0000);  // Error if div by 0
