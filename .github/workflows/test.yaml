@@ -15,11 +15,13 @@ jobs:
       - name: Verify Working Directory and Files
         run: |
           pwd  # Print current working directory
-          ls -la  # List all files to confirm project.tlv exists
+          ls -la  # List all files to confirm src/project.tlv exists
       - name: Compile TL-Verilog
         run: |
           # Ensure we're in the correct directory and bypass ToS prompt
-          echo "y" | sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
+          cd /home/runner/work/test123/test123
+          echo "y" | sandpiper-saas -i src/project.tlv -o project.v --top my_module --verbose
+        working-directory: /home/runner/work/test123/test123
       - name: List Files
         run: ls -la
       - name: Check project.v
