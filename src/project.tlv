@@ -11,9 +11,8 @@ module top(input wire clk, input wire reset, output wire error3);
    |comp
       @0
          $reset = reset;       // Explicit reset signal
-         $clk = clk;           // Explicit clock signal (optional for Makerchip)
-
-         // Define inputs to help avoid errors (example: 4-bit calculator)
+         $clk = clk;           // Explicit clock signal
+         // Define inputs (example: 4-bit calculator)
          $in1[3:0] = 4'b1011;  // Example input 1 (11 decimal)
          $in2[3:0] = 4'b0000;  // Example input 2 (0 decimal)
          $op[1:0] = 2'b10;     // Example operation: 00=add, 01=sub, 10=div, 11=mult
@@ -34,6 +33,7 @@ module top(input wire clk, input wire reset, output wire error3);
          // Stage 6: Define divide-by-zero
          $divide_by_zero = ($op == 2'b10) && ($in2 == 4'b0000);  // Error if div by 0
          $error3 = $divide_by_zero || $error2;                   // Final error signal
+         `BOGUS_USE($clk $reset)  // Silence unused signal warnings
 
       @6
          // Output to top-level module
