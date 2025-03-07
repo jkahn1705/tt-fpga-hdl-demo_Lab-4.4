@@ -1,35 +1,32 @@
 \m5_TLV_version 1d: tl-x.org
 \m5
-// Jason Kahn Lab 4.3
-// TL-Verilog module calculating size based on weight thresholds.
-// Size logic: 3 (>=64), 2 (>=56), 1 (default).
-// 
+// Jason Kahn Lab 4.4
+// Create a pipelined circuit that accumulates error signals generated at different pipeline stages using TL-Verilog 
+//    Create a pipeline named comp.
+//    At various stages, define error flags that indicate specific conditions:
+//    Stage 1: bad_input and illegal_op. Combine these using an OR operation to create error1.
+//    Stage 3: Add an overflow condition. Combine it with error1 to create error2.
+//    Stage 6: Add a divide_by_zero condition. Combine this with error2 to create a final error3.
+//
 \SV
    module my_module (
       input wire clk,         // Clock input
       input wire reset,       // Reset
       output reg [1:0] size   // Size output (2 bits) based on weight
    );
-      reg [7:0] weight;       // Weight register (8 bits)
-      always @(posedge clk or posedge reset) begin  
-         if (reset) begin    // Reset condition
-            weight <= 8'b0;   // Clear weight
-         end else begin      // Normal operation
-            weight <= weight + 1;  // Increment weight
-         end
-      end
 // TL-Verilog logic for size based on weight
 \TLV
-   |cpu
+   |comp
       @0
          $reset = reset;       // Explicit reset signal
          $clk = clk;           // Explicit clock signal
-         $weight[7:0] = $reset ? 8'd0 : (>>1$weight + 1);  // Assign weight from Verilog or pipeline
-         $size[1:0] = 
-            $weight[7:0] >= 8'd64 ? 2'd3 :  // Size 3 if weight >= 64
-            $weight[7:0] >= 8'd56 ? 2'd2 :  // Size 2 if weight >= 56
-            2'd1;                          // Default size 1
-         `BOGUS_USE($clk $size)  // Silence unused signal warnings
+      @1
+         $error1 = $bad_input || $illegal_op;
+      @3
+         $error2 = $overflow || $error1;
+      @6
+         $error3 = $divide_by_zerov || $error2;
+
 \SV
    always @(posedge clk or posedge reset) begin
       if (CPU_reset_a0) size <= 2'd1;  // Use translated reset signal
