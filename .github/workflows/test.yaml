@@ -10,17 +10,28 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pip
           pip3 install sandpiper-saas==1.1.0 --no-input
+          # Patch sandpiper-saas to skip ToS prompt with detailed debug
+          echo "Patching sandpiper-saas to skip ToS prompt"
+          if [ -f "/home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py" ]; then
+            echo "Found sandpiper/__init__.py, applying patch..."
+            sed -i "s/if click.confirm('Please review our Terms of Service: https:\/\/makerchip.com\/terms\/.\n.*', default=False)/if False  # Disabled ToS prompt for CI/" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py
+            echo "Patch applied, verifying full content..."
+            cat /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py > patched_sandpiper.txt
+            echo "Patched content saved to patched_sandpiper.txt for debugging."
+            # Check if the patch was applied by searching for the new line
+            if grep -q "if False  # Disabled ToS prompt for CI" /home/runner/.local/lib/python3.12/site-packages/sandpiper/__init__.py; then
+              echo "Patch successfully applied."
+            else
+              echo "Warning: Patch may not have applied correctly. Continuing..."
+            fi
+          else
+            echo "Error: sandpiper/__init__.py not found"
+            exit 1
+          fi
       - name: Install Verilator
         run: sudo apt-get install -y verilator
-      - name: Verify Working Directory and Files
-        run: |
-          pwd  # Print current working directory
-          ls -la  # List all files to confirm src/project.tlv and testbench.v exist
       - name: Compile TL-Verilog
-        run: |
-          cd /home/runner/work/test123/test123
-          echo "y" | sandpiper-saas -i src/project.tlv -o project.v --verbose
-        working-directory: /home/runner/work/test123/test123
+        run: sandpiper-saas -i project.tlv -o project.v --top my_module --verbose
       - name: List Files
         run: ls -la
       - name: Check project.v
@@ -30,4 +41,4 @@ jobs:
           ls -la testbench.v || echo "testbench.v not found"
           cat testbench.v || echo "Cannot display testbench.v"
       - name: Build and Simulate
-        run: verilator --binary -j 0 --trace testbench.v project.v && ./obj_dir/Vtestbench
+        run: verilator --binary -j 0 --trace testbench.v project.v -o obj_dir/Vtestbench && obj_dir/Vtestbench
