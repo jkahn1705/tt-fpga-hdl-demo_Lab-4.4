@@ -1,4 +1,12 @@
 \TLV_version 1d: tl-x.org
+//
+// Jason Kahn Lab 4.4
+// Create a pipeline named comp.
+// At various stages, define error flags that indicate specific conditions:
+// Stage 1: bad_input and illegal_op. Combine these using an OR operation to create error1.
+// Stage 3: Add an overflow condition. Combine it with error1 to create error2.
+// Stage 6: Add a divide_by_zero condition. Combine this with error2 to create a final error3.
+//
 \SV
 module top(input wire clk, input wire reset, output wire error3);
    logic [31:0] cycle_count;  // Optional: for simulation visibility
