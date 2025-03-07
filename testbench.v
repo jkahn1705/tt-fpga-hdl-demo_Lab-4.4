@@ -3,7 +3,7 @@ module testbench;
     reg reset;
     wire error3;
 
-    my_module dut (
+    top dut (
         .clk(clk),
         .reset(reset),
         .error3(error3)
