@@ -27,6 +27,7 @@ jobs:
           else
             echo "Error: sandpiper/__init__.py not found"
             exit 1
+          fi # <-- Added this line to close the if conditional block
       - name: Install Verilator
         run: sudo apt-get install -y verilator
       - name: Compile TL-Verilog
